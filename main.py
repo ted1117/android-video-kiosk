@@ -6,12 +6,15 @@ from pathlib import Path
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import Response, StreamingResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 # ==========================================
 # 1. 앱 설정 및 경로 초기화
 # ==========================================
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # [핵심] 현재 파일(main.py)이 있는 위치를 기준으로 templates 폴더 찾기
 BASE_DIR = Path(__file__).resolve().parent

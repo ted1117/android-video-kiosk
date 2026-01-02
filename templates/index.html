@@ -1,85 +1,50 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>효도 비디오</title>
-    <style>
-      /* 기존 CSS 그대로 유지 */
-      body {
-        background: #1a1a1a;
-        color: white;
-        font-family: sans-serif;
-        padding: 20px;
-      }
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 15px;
-      }
-      .video-card {
-        background: #333;
-        border-radius: 10px;
-        padding: 15px;
-        text-align: center;
-        cursor: pointer;
-        border: 1px solid #444;
-      }
-      .title {
-        font-weight: bold;
-        margin-top: 10px;
-      }
-      /* 플레이어 스타일 생략 (기존과 동일) */
-    </style>
-  </head>
-  <body>
-    <h1>📺 할머니 동영상 목록</h1>
 
-    <!-- 경고 메시지가 있을 때만 표시 -->
+    <link rel="stylesheet" href="{{ url_for('static', path='css/app.css') }}" />
+  </head>
+
+  <body>
+    <h1>할머니 동영상 목록</h1>
+
     {% if warnings %}
-    <div style="background: gold; color: black; padding: 10px; margin-bottom: 20px">
-      ⚠️ 재생 불가능한 파일: {{ warnings|join(', ') }}
+    <div class="warning" role="alert">
+      <strong>재생 불가능한 파일이 {{ warnings|length }}개 있습니다.</strong><br />
+      필요하면 가족에게 확인 요청하세요.
     </div>
     {% endif %}
 
-    <div class="grid">
-      <!-- Jinja2 반복문 시작 -->
+    <div class="grid" role="list">
       {% for video in videos %}
-      <div class="video-card" onclick="playVideo('{{ video.path }}', '{{ video.name }}')">
-        <div style="font-size: 30px">▶</div>
-        <div class="title">{{ video.name }}</div>
+      <div
+        class="video-card"
+        role="listitem"
+        tabindex="0"
+        data-path="{{ video.path }}"
+        data-name="{{ video.name }}"
+        aria-label="동영상 재생: {{ video.name }}"
+      >
+        <div class="play-icon" aria-hidden="true">▶</div>
+        <div>
+          <p class="title">{{ video.name }}</p>
+        </div>
       </div>
       {% else %}
-      <p>동영상이 없습니다.</p>
+      <p class="empty">동영상이 없습니다.</p>
       {% endfor %}
-      <!-- 반복문 끝 -->
     </div>
 
-    <!-- 비디오 플레이어 (숨김 상태) -->
-    <div
-      id="player-overlay"
-      style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black"
-    >
-      <button onclick="closePlayer()" style="position: absolute; top: 20px; right: 20px; font-size: 20px; z-index: 100">
-        닫기 X
-      </button>
-      <video id="video-player" controls style="width: 100%; height: 100%"></video>
+    <div id="player-overlay" aria-hidden="true">
+      <div class="player-topbar">
+        <button class="btn btn-danger" id="btn-close" type="button">닫기</button>
+      </div>
+      <video id="video-player" controls playsinline></video>
     </div>
 
-    <script>
-      function playVideo(path, name) {
-        // Jinja가 렌더링한 경로는 이미 인코딩 되어 있다고 가정하거나 여기서 처리
-        var player = document.getElementById("video-player");
-        player.src = "/stream/" + path;
-        document.getElementById("player-overlay").style.display = "block";
-        player.play();
-      }
-      function closePlayer() {
-        var player = document.getElementById("video-player");
-        player.pause();
-        player.src = "";
-        document.getElementById("player-overlay").style.display = "none";
-      }
-    </script>
+    <script src="{{ url_for('static', path='js/app.js') }}" defer></script>
   </body>
 </html>
