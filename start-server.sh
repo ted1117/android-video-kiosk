@@ -2,7 +2,12 @@
 
 termux-wake-lock
 
-PROJECT_DIR="$HOME/<PROJECT_DIR>" # TODO: replace <PROJECT_DIR> with your project folder
+SCRIPT_PATH="$0"
+if command -v readlink >/dev/null 2>&1; then
+  SCRIPT_PATH="$(readlink -f "$0")"
+fi
+
+PROJECT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd)"
 LOG_FILE="$PROJECT_DIR/server.log"
 
 cd "$PROJECT_DIR" || exit 1
