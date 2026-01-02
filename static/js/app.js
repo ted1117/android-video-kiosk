@@ -6,7 +6,7 @@
     function playVideo(path, name) {
         player.src = "/stream/" + path;
 
-        overlay.style.display = "block";
+        overlay.style.display = "flex";
         overlay.setAttribute("aria-hidden", "false");
 
         player.play().catch(function () {

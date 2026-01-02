@@ -111,17 +111,14 @@ h1 {
     background: #000;
     z-index: 9999;
     overflow: hidden;
+    flex-direction: column;
 }
 
 .player-topbar {
-    position: absolute;
-    top: env(safe-area-inset-top);
-    left: 0;
-    right: 0;
     padding: 14px;
+    padding-top: calc(14px + env(safe-area-inset-top));
     display: flex;
     justify-content: flex-end;
-    z-index: 2;
 }
 
 .btn {
@@ -149,9 +146,8 @@ h1 {
 #video-player {
     width: 100%;
     height: 100%;
-    position: absolute;
-    inset: 0;
-    z-index: 1;
+    flex: 1;
+    object-fit: contain;
 }
 
 
