@@ -94,13 +94,13 @@ mkdir ~/.termux/boot/
 ### 2) start-server.sh 준비
 
 ```bash
-cp ~/android-video-kiosk/start-server.sh ~/.termux/boot/
-cd ~/.termux/boot/
-nano start-server.sh
+mkdir -p ~/.termux/boot
+chmod +x ~/<PROJECT_DIR>/start-server.sh
+ln -sf ~/<PROJECT_DIR>/start-server.sh ~/.termux/boot/start-server.sh
 ```
 
-`com.example/.MainActivity`는 실행하려는 앱의 패키지명과 액티비티명으로 교체합니다.
+`start-server.sh`에서 아래 한 줄만 실행하려는 앱의 **패키지명/액티비티명**으로 바꿔주세요.
 
 ```bash
-chmod +x start-server.sh
+am start -W --user 0 -n com.example/.MainActivity
 ```
